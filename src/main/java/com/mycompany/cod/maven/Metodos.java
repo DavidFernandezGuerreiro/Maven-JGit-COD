@@ -42,6 +42,10 @@ public class Metodos {
         obxBuilder.create();
     }
     
+    /**
+     * Clona el proyecto de repositorio creado en GitHub.
+     * Pide por teclado la URL.git del repositorio y la ruta donde quieres guardar el proyecto.
+     */
     public void clonar(){
         try {
             Git.cloneRepository()
@@ -54,9 +58,41 @@ public class Metodos {
         }
     }
     
-    
-    
-    
+    /**
+     * Hace un nuevo commit al proyecto que quieras.
+     * Pide por teclado el mensaje del commit.
+     * 
+     * @param rutaCommit Pide por teclado introducir la ruta del proyecto .git.
+     */
+    public void commit(){
+        
+        String rutaCommit=JOptionPane.showInputDialog("Introducir la 'ruta del proyecto .git': ");
+        
+        FileRepositoryBuilder repositoryBuilder=new FileRepositoryBuilder();
+        try {
+            org.eclipse.jgit.lib.Repository repo=repositoryBuilder.setGitDir(new File(rutaCommit))
+                    ///home/local/DANIELCASTELAO/dfernandezguerreiro/NetBeansProjects/JavaApplication135/.git
+                    .readEnvironment()
+                    .findGitDir()
+                    .setMustExist(true)
+                    .build();
+            
+            Git git=new Git(repo);
+            AddCommand add = git.add();
+            add.addFilepattern(rutaCommit).call();
+            ///home/local/DANIELCASTELAO/dfernandezguerreiro/NetBeansProjects/JavaApplication135/.git
+            
+            git=new Git(repo);
+            CommitCommand commit = git.commit();
+            commit.setMessage(JOptionPane.showInputDialog("Introducir el mensaje del commit: ")).call();
+            
+        } catch (IOException ex) {
+            System.out.println("ERROR: "+ex);
+        } catch (GitAPIException ex) {
+            System.out.println("ERROR 2: "+ex);
+        }
+        
+    }
     
     
 }
