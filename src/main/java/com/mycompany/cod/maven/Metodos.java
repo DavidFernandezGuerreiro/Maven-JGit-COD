@@ -42,7 +42,17 @@ public class Metodos {
         obxBuilder.create();
     }
     
-    
+    public void clonar(){
+        try {
+            Git.cloneRepository()
+                    .setURI(JOptionPane.showInputDialog("Introducir la URL.git del repositorio: "))
+                    .setDirectory(new File(JOptionPane.showInputDialog("Introducir la ruta de la carpeta donde se guardará el proyecto clonado:")))
+                    .call();
+            
+        } catch (GitAPIException ex) {
+            System.out.println("ERROR: "+ex);
+        }
+    }
     
     
     
