@@ -4,11 +4,15 @@ package com.mycompany.cod.maven;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.InitCommand;
+
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.RemoteAddCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -27,12 +31,22 @@ import org.kohsuke.github.GitHub;
  */
 public class Metodos {
     /**
+     * Inicializa un repositorio.
      * Crea un nuevo repositorio en GitHub con el nombre de usuario y contraseña creados en la carpeta .github.
      * Pide por teclado el nombre que le quieres asignar al repositorio.
      * 
+     * @param ruta La tura donde se encuentra el proyecto.
      * @throws IOException Señala que se ha producido un error de E/S.
      */
     public void createRepository() throws IOException{
+        String ruta=JOptionPane.showInputDialog("Introducir ruta proyecto: ");
+        InitCommand repositorio=new InitCommand();
+        try {
+            repositorio.setDirectory(new File(ruta)).call();
+        } catch (GitAPIException ex) {
+            System.out.println("ERROR: "+ex);
+        }
+        
         GitHub obxGitHub=GitHub.connect();
         GHCreateRepositoryBuilder obxBuilder=obxGitHub.createRepository(JOptionPane.showInputDialog("Introducir nombre del repositorio: "));
         obxBuilder.create();
